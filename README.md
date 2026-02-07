@@ -77,7 +77,21 @@ Logstash принимал сырую телеметрию, разбирал `JSO
 
 Вся логика выглядела так:
 
-[architecture.png](img/architecture.png)
+```mermaid
+flowchart LR
+    subgraph PC["ПК с Assetto Corsa"]
+        AC[Assetto Corsa]
+        SM[Shared Memory]
+        COL[AC Collector]
+        AC --> SM --> COL
+    end
+    subgraph Cloud["Облако"]
+        LS[Logstash]
+        SMON[Аналитическая платформа]
+        LS --> SMON
+    end
+    COL -->|UDP / JSON| LS
+```
 
 Критически важным для нас было добиться мгновенной отправки данных. Пока пилот проезжает круг, данные уже на дашборде.
 Такой подход оказался достаточно устойчивым: система пережила за три дня форума десятки перезапусков игры, смену пилотов и трасс, но ручного вмешательства не потребовалось.
